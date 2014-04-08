@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- code by "galin"<cuter44@stu.scau.edu.cn> -->
+<!-- Ant build configuration -->
+<!-- Project TVProtal -->
+<project basedir="." default="build-all" >
+
+  <!-- 变量定义 -->
+  <property name="srcdir" value="src" />
+  <property name="destdir" value="web/WEB-INF/classes" />
+  <property name="bindir" value="${destdir}" />
+
+  <path id="classpath">
+    <!-- web/WEB-INF/lib 存放需要发布的类库 -->
+    <fileset id="packages" dir="web/WEB-INF/lib">
+	  <include name="*.jar" />
+	</fileset>
+	<!-- lib 存放开发及测试用库 -->
+	<fileset id="debug-packages" dir="lib">
+	  <include name="*.jar" />
+	</fileset>
+	<pathelement path="web/WEB-INF/classes" />
+  </path>
+
+  <!--=======================================================================-->
+  <!-- BUILD -->
+  <target name="build" description="编译">
+    <antcall target="copy-config" />
+    <javac srcdir="${srcdir}" destdir="${destdir}" failonerror="true" debug="true" includeantruntime="false">
+      <classpath refid="classpath" />
+	</javac>
+  </target>
+
+  <target name="build-all" description="全部重新编译">
+    <antcall target="clear-built" />
+    <antcall target="build" />
+  </target>
+
+  <target name="clear-built" description="清理">
+    <delete>
+      <fileset dir="${destdir}" includes="**/*"/>
+    </delete>
+  </target>
+
+  <target name="copy-config" description="复制配置文件">
+	<copy todir="${destdir}">
+	  <fileset dir="${srcdir}">
+	    <include name="**/*.xml" />
+		<include name="**/*.properties" />
+	  </fileset>
+	</copy>
+  </target>
+
+  <!--=======================================================================-->
+  <!-- JAVADOC -->
+  <target name="javadoc" description="生成javadoc">
+    <javadoc sourcepath="${srcdir}" destdir="javadoc" private="true" classpathref="classpath"/>
+  </target>
+
+  <!--=======================================================================-->
+  <!-- RUN -->
+  <target name="run" description="直接运行, 使用-Drun.main=&lt;类名&gt;指定入口类">
+    <java classname="${run.main}" fork="true" dir="${bindir}">
+      <classpath refid="classpath" />
+	</java>
+  </target>
+
+  <!-- DEBUG -->
+  <target name="debug" description="本地调试, 使用-Ddebug.main=&lt;类名&gt;指定jvm的入口类">
+	<java classname="${debug.main}" fork="true" dir="${bindir}">
+      <!-- 启用断言 -->
+      <jvmarg value="-ea" />
+      <!-- 启用调试 -->
+      <jvmarg value="-Xdebug"/> 
+      <!-- 启用远程调试 -->
+      <jvmarg value="-Xrunjdwp:transport=dt_socket,address=8288,suspend=y,server=y"/>
+      <classpath refid="classpath" />
+	</java>
+  </target>
+</project>

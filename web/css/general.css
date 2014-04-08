@@ -1,0 +1,48 @@
+body.hasaha-background
+{
+  background-image:url("../images/20131018454_bg.jpg");
+  background-color:#e5e5e5;
+  background-attachment:fixed;
+}
+
+html.whole-window
+html.whole-window > body
+{
+  width:100%;
+  height:100%;
+  margin:0px;
+}
+
+input[type=text]
+{
+  border:1px solid #B3B3B3;
+  margin:2px;
+  border-radius:4px;
+}
+
+input[type=text]:focus
+{
+  box-shadow:0px 0px 6px #66ccff inset;
+}
+
+input.invalid
+{
+  box-shadow:0px 0px 6px #ff0000 inset;
+}
+
+textarea
+{
+  background-color: rgba(255,255,255,0.4);
+  border:1px solid #B3B3B3;
+  border-radius:4px;
+}
+
+textarea:focus
+{
+  box-shadow:0px 0px 6px #66ccff inset;
+}
+
+textarea.invalid
+{
+  box-shadow:0px 0px 6px #ff0000 inset;
+}
